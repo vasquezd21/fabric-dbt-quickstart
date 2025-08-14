@@ -2,7 +2,7 @@
 
 Microsoft Fabric now lets you build and transform data pipelines using **dbt**—all within the Fabric web experience. No external adapters, no CLI, no Airflow. Just SQL, a warehouse, and a streamlined UI.
 
-This guide walks you through:
+This walkthrough demonstrates how to use dbt directly within Microsoft Fabric to transform data in a warehouse—without external tools. It’s designed to help data engineers and analysts:
 - Creating a sample Data Warehouse in Fabric
 - Building a dbt item to transform your data
 - Running and validating your models—all natively in Fabric
@@ -18,14 +18,14 @@ Before you begin, make sure you have:
 ---
 
 ## 🧱 Step 1: Create a Sample Data Warehouse
-1. In your Fabric workspace, click **+ New** → **Sample Warehouse**.
-2. Name your warehouse (e.g., `warehouse-test`) and choose a lakehouse or dataset to connect.
-3. Sample data will be create that we will transform later in dbt
+1. In your Fabric workspace, click `New` then select `Sample Warehouse`.
+2. Name your warehouse (e.g., `warehouse-test`). Sample data will be created, which we’ll transform using dbt.
+
 
 ---
 
 ## 📦 Step 2: Create a dbt Item
-1. Click **+ New** → **dbt project**.
+1. Click `New Item`, then select `dbt job(preview)`.
 2. Name your project (e.g., `dbt-project`) and select the warehouse you just created.
 3. You’ll see the dbt interface with:
    - `Explorer (Left)`: Manage files and folders
@@ -37,7 +37,7 @@ Before you begin, make sure you have:
 
 ## Step 3: Build Your dbt Project
 
-##### 1.Create Your Folder Structure
+##### 1. Add Required Folders and Files
 When you create a new dbt item in Fabric, it only gives you a blank canvas. You’ll need to manually add the following:
 
 ```
@@ -47,7 +47,6 @@ dbt/
 ├── schema.yml
 ├── dbt_project.yml
 ```
-##### 2.  Add Required Folders and Files:
 Click `New` in the `Explorer` to create new files and folders
 ![pic](buildFolder.png)
    - `models/`: Folder to store your SQL models.
@@ -55,8 +54,8 @@ Click `New` in the `Explorer` to create new files and folders
    - `schema.yml`: Defines tests and documentation for your models.
    - `dbt_project.yml`: Core configuration file for your dbt project.
 
-##### 3. Populate Files
-`dbt_project.yml` Tells dbt how to run your project.
+##### 2. Populate Files
+`dbt_project.yml` defines your project’s structure and execution settings.
 ```
 name: 'fabric_demo'
 version: '1.0'
@@ -64,7 +63,7 @@ profile: 'fabric'
 model-paths: ['models']
 ```
 
-`schema.yml` Defines metadata and tests for your models.
+`schema.yml` Defines metadata and validation rules.
 ```
 version: 2
 
@@ -92,16 +91,19 @@ FROM
 
 ## ⚙️ Step 4: Configure and Run
 - In the Settings panel:
-  - Select your warehouse connection that we created earlier `warehouse-test`
-  - Set your schema name, in this case we use dbo
+  - Select your warehouse connection `warehouse-test`
+  - Set your schema name (e.g `dbo`)
   - Adjust thread count (default: 4)
-- Click **Run** to execute your models
-- View input, ouput, and potential errors directly in the UI in the `Job output` section
+- Click `Run` to execute your models
+   - If the run fails, check the Job output panel for error messages and verify your SQL syntax and warehouse connection.
+- Validate Transoformations
+   - View input, ouput, and potential errors directly in the UI in the `Job output` panel
+![Job Output](joboutput.png)
 
 ---
 
-## 🌟 Why This Matters
-- No external setup or adapters needed
-- Fully integrated with Fabric’s compute and security
+## Why This Matters
+- Native Integration: dbt runs directly in Fabric—no CLI, adapters, or orchestration layers needed.
+- Declarative SQL Modeling: You define transformations using SQL, and dbt handles dependencies and execution order.
 - Visual lineage and Git integration
-- Ideal for SQL-savvy data engineers and analysts
+- Lineage Visualization: Fabric shows how data flows from source to model, helping with debugging and auditing. 
